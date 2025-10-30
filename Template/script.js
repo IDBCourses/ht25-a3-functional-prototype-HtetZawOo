@@ -9,6 +9,7 @@ import * as Util from "./util.js";
 const initialSize = 50;
 const targetSize = 250;
 const balloonGap = 200;
+
 //Global Variables
 let players = []
 let nPlayers = 0; //Number of Players
@@ -20,11 +21,12 @@ let assignedKeys = [
   ["c","v"], //Player 3 Keys
   ["n","m"]  //Player 4 Keys
 ];
+
 //Settings variables should contain all of the "fixed" parts of your programs
 
 //Functions
 
-//Start Game function
+/* //Start Game function
 function startGame(){
 
 }
@@ -37,25 +39,46 @@ function gameOver(){
 //Game Restart function
 function restartGame(){
 
-}
+} */
 
 //Create Players and Balloons
 function createPlayers(){
 players = [];
+const balloonGap = window.innerWidth/(nPlayers+1);
 
-for (let i=)
+for (let i=0; i<nPlayers; i++){
+  const balloon = Util.createThing("player"+(i+1));
+  Util.setColour(Math.random()*360,100,50,1,balloon);
+  Util.setSize(initialSize,initialSize,balloon);
+  console.log(i);
+  const player = {
+    balloon,
+    x: balloonGap*(i+1),
+    y: window.innerHeight/2,
+  };
+  players.push(player);
+  Util.setPositionPixels(player.x, player.y,player.balloon);
+}
 }
 
 
 //Code that runs over and over again
 function loop() {
-
+  nPlayers++;
+  if (nPlayers<=4){
+   createPlayers();
+  } else if (nPlayers>4){
+    return;
+  }
+  console.log(`Number of Players ${nPlayers}`);
+  
   window.requestAnimationFrame(loop);
 }
 
 //Starting Screen of the Game
 function startScreen() {
 //Put your event listener code here
+
 
   window.requestAnimationFrame(loop);
 }
