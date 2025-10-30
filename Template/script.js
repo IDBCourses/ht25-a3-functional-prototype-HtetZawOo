@@ -13,6 +13,7 @@ const balloonGap = 200;
 //Global Variables
 let players = []
 let nPlayers = 0; //Number of Players
+let maxPlayers =4; //Maximum Number of Players
 let gameStart = false;
 let gameOver = false;
 let assignedKeys = [
@@ -65,9 +66,9 @@ for (let i=0; i<nPlayers; i++){
 //Code that runs over and over again
 function loop() {
   nPlayers++;
-  if (nPlayers<=4){
+  if (nPlayers<=maxPlayers){
    createPlayers();
-  } else if (nPlayers>4){
+  } else if (nPlayers>maxPlayers){
     return;
   }
   console.log(`Number of Players ${nPlayers}`);
