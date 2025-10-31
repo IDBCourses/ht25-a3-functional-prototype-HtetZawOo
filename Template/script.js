@@ -49,7 +49,7 @@ const balloonGap = window.innerWidth/(nPlayers+1);
 console.log(`Players ${players}`);
 for (let i=0; i<nPlayers; i++){
   const balloon = Util.createThing("player"+(i+1));
-  Util.setColour(Math.random()*360,100,50,1,balloon);
+  Util.setColour(Math.random()*360,100,50,1,balloon); //Need to have no identical colors
   Util.setSize(initialSize,initialSize,balloon);
   console.log(i);
   const player = {
