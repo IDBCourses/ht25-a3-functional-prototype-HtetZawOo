@@ -12,7 +12,7 @@ const balloonGap = 200;
 
 //Global Variables
 let players = []
-let nPlayers = 0; //Number of Players
+let nPlayers = 4; //Number of Players
 let maxPlayers =4; //Maximum Number of Players
 let gameStart = false;
 let gameOver = false;
@@ -46,7 +46,7 @@ function restartGame(){
 function createPlayers(){
 players = [];
 const balloonGap = window.innerWidth/(nPlayers+1);
-
+console.log(`Players ${players}`);
 for (let i=0; i<nPlayers; i++){
   const balloon = Util.createThing("player"+(i+1));
   Util.setColour(Math.random()*360,100,50,1,balloon);
@@ -57,7 +57,9 @@ for (let i=0; i<nPlayers; i++){
     x: balloonGap*(i+1),
     y: window.innerHeight/2,
   };
+  
   players.push(player);
+  console.log(player);
   Util.setPositionPixels(player.x, player.y,player.balloon);
 }
 }
@@ -65,13 +67,6 @@ for (let i=0; i<nPlayers; i++){
 
 //Code that runs over and over again
 function loop() {
-  nPlayers++;
-  if (nPlayers<=maxPlayers){
-   createPlayers();
-  } else if (nPlayers>maxPlayers){
-    return;
-  }
-  console.log(`Number of Players ${nPlayers}`);
   
   window.requestAnimationFrame(loop);
 }
@@ -79,7 +74,7 @@ function loop() {
 //Starting Screen of the Game
 function startScreen() {
 //Put your event listener code here
-
+createPlayers();
 
   window.requestAnimationFrame(loop);
 }
