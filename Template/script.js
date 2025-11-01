@@ -13,11 +13,17 @@ let nPlayers = 3; //Number of Players
 let maxPlayers =3; //Maximum Number of Players
 let gameStart = false;
 let gameOver = false;
-let assignedKeys = [
-  ["z","x"], //Player 1 Keys
-  ["g","h"], //Player 2 Keys
-  ["o","p"], //Player 3 Keys
+let assignedTapKeys = [
+  ["Z","X"], //Player 1 Tap Keys
+  ["G","H"], //Player 2 Tap Keys
+  ["O","P"], //Player 3 Tap Keys
 ];
+let assignedSwipeKeys =[
+  ["Z","X","C","V"], //Player 1 Swipe Keys
+  ["G","H","I","J"], //Player 2 Swipe Keys
+  ["O","P","[","]"], //Player 3 Swipe Keys
+];  
+
 
 //Global fixed Variables
 
@@ -37,9 +43,20 @@ function hideMessageBox(){
   messageBox.style.display = "none";
 }
 
-function showTopBar (text) {
+function showTopBar (text){
   topBar.innerHTML = text;
   topBar.style.display = "block";
+}
+
+function updateTopBar (){
+  let text = "";
+  for (let i=0; i<nPlayers; i++){
+    const tapKeys = players[i].tapKeys;
+    const swipeKeys = players[i].swipeKeys;
+    text += `${i+1}P - Tap: <b>${tapKeys[0]}</b> & <b>${tapKeys[1]}</b> | Swipe: <b>${swipeKeys[0]}</b> <=> <b>${swipeKeys[3]}</b>`;
+    if (i<nPlayers -1) text += `<br>`;
+  }
+  showTopBar(text);
 }
 /* //Start Game function
 function startGame(){
@@ -72,6 +89,8 @@ for (let i=0; i<nPlayers; i++){
     balloon,
     x: balloonGap*(i+1),
     y: window.innerHeight/2,
+    tapKeys: assignedTapKeys[i], 
+    swipeKeys: assignedSwipeKeys[i],
   };
   console.log(`Ballon is at X-axis: ${player.x}`)
   players.push(player);
@@ -134,8 +153,7 @@ function startScreen() {
   `);
   //Put your event listener code here
 createPlayers();
-
+updateTopBar();
   window.requestAnimationFrame(loop);
 }
-
 startScreen(); // Always remember to call setup()!
