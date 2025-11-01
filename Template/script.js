@@ -48,22 +48,34 @@ function showTopBar (text){
   topBar.style.display = "block";
 }
 
+function hideTopBar(){
+  topBar.style.display = "none";
+}
+
 function updateTopBar (){
   let text = "";
   for (let i=0; i<nPlayers; i++){
     const tapKeys = players[i].tapKeys;
     const swipeKeys = players[i].swipeKeys;
-    text += `${i+1}P - Tap: <b>${tapKeys[0]}</b> & <b>${tapKeys[1]}</b> | Swipe: <b>${swipeKeys[0]}</b> <=> <b>${swipeKeys[3]}</b>`;
-    if (i<nPlayers -1) text += `<br>`;
+    text += `${i+1}P - Tap: <b>${tapKeys[0]}</b> & <b>${tapKeys[1]}</b> | Swipe: <b>${swipeKeys[0]}</b> <=> <b>${swipeKeys[3]}</b><br>`;
+    /* if (i<nPlayers -1) text += `<br>`; */
   }
   showTopBar(text);
 }
-/* //Start Game function
+//Start Game function
 function startGame(){
+  hideMessageBox();
+  createPlayers();
+  gameStart = true;
+  gameOver = false;
+  showTopBar("Game Starts!");
 
+  setTimeout(() => {
+    updateTopBar();
+  },2000);
 }
 
-//Game Over function
+/* //Game Over function
 function gameOver(){
 
 }
@@ -138,22 +150,25 @@ function startScreen() {
     <br>
     <br>
     <font size = 2>
-    Player 1 (Red)
+    Player 1 (Red) | Tap: <b>Z</b> & <b>X</b> | Swipe: <b>Z</b> <=> <b>V</b>
     <br>
-    Tap: <b>Z</b> & <b>X</b> | Swipe: <b>Z</b> <=> <b>V</b>
+    Player 2 (Green) | Tap: <b>G</b> & <b>H</b> | Swipe: <b>G</b> <=> <b>K</b>
     <br>
-    Player 2 (Green)
-    <br>
-    Tap: <b>G</b> & <b>H</b> | Swipe: <b>G</b> <=> <b>K</b>
-    <br>
-    Player 3 (Blue)
-    <br>
-    Tap: <b>O</b> & <b>P</b> | Swipe: <b>O</b> <=> <b>]</b>
+    Player 3 (Blue) | Tap: <b>O</b> & <b>P</b> | Swipe: <b>O</b> <=> <b>]</b>
     </font>
   `);
   //Put your event listener code here
-createPlayers();
-updateTopBar();
+
+document.addEventListener("keydown", (event) => {
+  if (event.code === "Enter"){
+    startGame();
+  }
+});
+document.addEventListener("keydown", (event)=>{
+  if (event.code === "Space"){
+    hideMessageBox();
+  }
+});
   window.requestAnimationFrame(loop);
 }
 startScreen(); // Always remember to call setup()!
