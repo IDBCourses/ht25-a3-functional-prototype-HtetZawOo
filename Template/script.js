@@ -81,7 +81,7 @@ function loop() {
 //Starting Screen of the Game
 function startScreen() {
   showMessageBox(`
-    <b>Balloon Popping Race!</b>
+    <b style = "font-size: 30px" >Balloon Popping Race!</b>
     <br>
     <br>
     Please choose number of players (2 or 3):
