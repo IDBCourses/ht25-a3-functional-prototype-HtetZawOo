@@ -24,12 +24,22 @@ let assignedKeys = [
 const initialSize = 50;
 const targetSize = 250;
 const balloonGap = 200;
-const messagebox = document.getElementById("messagebox");
-
+const messageBox = document.getElementById("messagebox");
+const topBar = document.getElementById("topbar");
 //Functions
-function showMessageBox (text){
-  messagebox.innerHTML = text;
-  messagebox.style.display = "block";
+
+function showMessageBox (text){ // To call message box.
+  messageBox.innerHTML = text;
+  messageBox.style.display = "block";
+}
+
+function hideMessageBox(){
+  messageBox.style.display = "none";
+}
+
+function showTopBar (text) {
+  topBar.innerHTML = text;
+  topBar.style.display = "block";
 }
 /* //Start Game function
 function startGame(){
@@ -63,7 +73,7 @@ for (let i=0; i<nPlayers; i++){
     x: balloonGap*(i+1),
     y: window.innerHeight/2,
   };
-  
+  console.log(`Ballon is at X-axis: ${player.x}`)
   players.push(player);
   console.log(player);
   Util.setPositionPixels(player.x, player.y,player.balloon);
@@ -80,19 +90,48 @@ function loop() {
 
 //Starting Screen of the Game
 function startScreen() {
+  topBar.style.display = "none";
   showMessageBox(`
-    <b style = "font-size: 30px" >Balloon Popping Race!</b>
+    <font size = 6>
+    <b>Balloon Popping Race!</b>
+    </font>
+
     <br>
     <br>
-    Please choose number of players (2 or 3):
+    Please choose number of players.
     <br>
-    Please press 2 or 3 on the keyboard.
+    Please press <b>2</b> or <b>3</b> on the keyboard.
     <br>
     <br>
+
+    <font size = 2>
     Instructions: Each player will be assigned with different keys to inflate and pop the balloon.
     <br>
-    Player 1 (Red)  
-    `)
+    Step 1: Tap the two assigned keys alternatively to inflate it.
+    <br>
+    Step 2: Once it is fully inflated, swipe the assigned key row from any direction to pop it.
+    </font>
+
+    <br>
+    <br>
+    Assigned Keys
+
+    <br>
+    <br>
+    <font size = 2>
+    Player 1 (Red)
+    <br>
+    Tap: <b>Z</b> & <b>X</b> | Swipe: <b>Z</b> <=> <b>V</b>
+    <br>
+    Player 2 (Green)
+    <br>
+    Tap: <b>G</b> & <b>H</b> | Swipe: <b>G</b> <=> <b>K</b>
+    <br>
+    Player 3 (Blue)
+    <br>
+    Tap: <b>O</b> & <b>P</b> | Swipe: <b>O</b> <=> <b>]</b>
+    </font>
+  `);
   //Put your event listener code here
 createPlayers();
 
