@@ -5,25 +5,25 @@
 
 import * as Util from "./util.js";
 
-//Global Constants
-const initialSize = 50;
-const targetSize = 250;
-const balloonGap = 200;
 
 //Global Variables
-let players = []
-let nPlayers = 4; //Number of Players
+
+let players = [];
+let nPlayers = 3; //Number of Players
 let maxPlayers =4; //Maximum Number of Players
 let gameStart = false;
 let gameOver = false;
 let assignedKeys = [
-  ["q","w"], //Player 1 Keys
-  ["o","p"], //Player 2 Keys
-  ["c","v"], //Player 3 Keys
-  ["n","m"]  //Player 4 Keys
+  ["z","x"], //Player 1 Keys
+  ["g","h"], //Player 2 Keys
+  ["o","p"], //Player 3 Keys
 ];
 
-//Settings variables should contain all of the "fixed" parts of your programs
+//Global fixed Variables
+
+const initialSize = 50;
+const targetSize = 250;
+const balloonGap = 200;
 
 //Functions
 
@@ -49,7 +49,9 @@ const balloonGap = window.innerWidth/(nPlayers+1);
 console.log(`Players ${players}`);
 for (let i=0; i<nPlayers; i++){
   const balloon = Util.createThing("player"+(i+1));
-  Util.setColour(Math.random()*360,100,50,1,balloon); //Need to have no identical colors
+  let hue = (i*120);
+  Util.setColour(hue,100,50,1,balloon); //Need to have no identical colors
+  console.log(`Hue is ${hue}`);
   Util.setSize(initialSize,initialSize,balloon);
   console.log(i);
   const player = {
