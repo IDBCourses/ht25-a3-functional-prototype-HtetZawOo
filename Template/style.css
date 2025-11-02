@@ -31,13 +31,13 @@ body {
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%); /*Repositioning based on its own width and height*/
     color:white;
     font-size: larger;
     text-align: center;
     background: darkgray;
     border-radius: 15px;
-    padding: 20px;
+    padding: 20px; /*Space between border and content*/
     cursor: default;
 }
 
