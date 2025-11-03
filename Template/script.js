@@ -24,6 +24,7 @@ let gameOver = false;
 const initialSize = 50;
 const targetSize = 250;
 const growthRate = 10;
+const swipeTime = 500;
 
 //Assigned Keys
 const assignedTapKeys = [
@@ -33,7 +34,7 @@ const assignedTapKeys = [
 ];
 const assignedSwipeKeys =[
   ["KeyZ","KeyX","KeyC","KeyV"], //Player 1 Swipe Keys
-  ["KeyG","KeyH","KeyI","KeyJ"], //Player 2 Swipe Keys
+  ["KeyG","KeyH","KeyJ","KeyK"], //Player 2 Swipe Keys
   ["KeyO","KeyP","BracketLeft","BracketRight"], //Player 3 Swipe Keys
 ];
 const topBarKeys = [
@@ -76,13 +77,13 @@ function clearTopBarData(){
 }
 
 function updateTopBar (){
-  let text = "";
-  for (let i=0; i<nPlayers; i++){
-    const tapKeys = players[i].topBarTap;
-    const swipeKeys = players[i].topBarSwipe;
-    text += `${i+1}P - Tap: <b>${tapKeys[0]}</b> & <b>${tapKeys[1]}</b> | Swipe: <b>${swipeKeys[0]}</b> <=> <b>${swipeKeys[1]}</b><br>`;
-    /* if (i<nPlayers -1) text += `<br>`; */
-  }
+  let text = `
+  Player 1 | Tap: <b>Z</b> & <b>X</b> | Swipe: <b>Z</b> => <b>V</b>
+  <br>
+  Player 2 | Tap: <b>G</b> & <b>H</b> | Swipe: <b>G</b> => <b>K</b>
+  <br>
+  Player 3 | Tap: <b>O</b> & <b>P</b> | Swipe: <b>O</b> => <b>]</b>
+  `;
   showTopBar(text);
 }
 
@@ -92,6 +93,7 @@ function startGame(){
   createPlayers();
   gameStart = true;
   gameOver = false;
+  winner = null;
   showTopBar("Game Starts!");
 //After 1 second, update top bar
   setTimeout(updateTopBar,gameStartBarTimer);
@@ -101,9 +103,12 @@ function startGame(){
 function restartGame(){
   hideMessageBox();
   clearTopBarData();
-  players=[];
+  players.forEach((p) => {
+      p.item.remove()
+  });
   gameStart = false;
   gameOver = false;
+  winner = null;
   startScreen();
 }
 
@@ -126,10 +131,21 @@ for (let i=0; i<nPlayers; i++){
     item: balloon,
     x: balloonGap*(i+1),
     y: window.innerHeight/2,
+    size: initialSize,
     tapKeys: assignedTapKeys[i], 
     swipeKeys: assignedSwipeKeys[i],
     topBarTap: topBarKeys[i].tap,
     topBarSwipe: topBarKeys[i].swipe,
+    swipeProgress: 0,
+    lastKey: null,
+    startTime: null,
+    endTime: null,
+    timeoutID: null,
+    prevCode: null,
+    currCode: null,
+    avgSpeed: null,
+    popped: false,
+    finished: false,
   };
 
   console.log(`Balloon is at X-axis: ${player.x}`)
@@ -139,11 +155,101 @@ for (let i=0; i<nPlayers; i++){
 }
 }
 
-
-//Code that runs over and over again
-function loop() {
+//Handling Input
+function handlingInput (key,code){
+  for (let p of players) {
+    if (p.popped) continue;  
+    //Tap alternatively to Grow
+    if (!p.finished) {
+      if (p.tapKeys.includes(key)){
+        if (p.lastKey === null){
+          p.lastKey = key;
+          p.startTime = performance.now();
+        } else if (p.lastKey !== key){
+          p.lastKey = key;
+          p.presses++;
+          p.size += growthRate;
+          Util.setSize(p.size,p.size,p.item);
+            if (p.size >= targetSize){
+              p.finished = true;
+             /*  clearTimeout(p.timeoutID); */
+              showMessageBox(`<b>Player ${players.indexOf(p)+1}</b>, swipe to pop the balloon!`);
+            }
+        }
+      }
+    }
+  }
   
-  window.requestAnimationFrame(loop);
+
+  //Swipe Detect (Left to Right)
+  for (let p of players){
+    if (!p.finished || p.popped) continue;
+    if (!p.swipeKeys.includes(code)) continue;
+
+    clearTimeout(p.timeoutID);
+    p.prevCode = p.currCode;
+    p.currCode = code;
+
+    const prevIndex = p.swipeKeys.indexOf(p.prevCode);
+    const currIndex = p.swipeKeys.indexOf(p.currCode);
+
+    //Progress only if swiping from Left to Right
+    if (prevIndex >=0 && currIndex === prevIndex +1){
+      p.swipeProgress++;
+    } else if (prevIndex === -1 && currIndex === 0) {
+      p.swipeProgress = 1; //First key of Swipe row
+    } else {
+      p.swipeProgress = currIndex === 0 ? 1 : 0;//Wrong direction or Key skipped resets progress : if (currIndex === 0){p.swipeProgress = 1} else {p.swipeProgress = 0}
+    }
+
+    //If full swipe is executed
+    if (p.swipeProgress >= p.swipeKeys.length){ //4
+      p.endTime = performance.now();
+      const totalTime = ((p.endTime - p.startTime)/1000).toFixed(2);//To show in seconds with 2 decimal places
+      Util.setSize(0,0,p.item);
+      p.popped = true;
+      winner = p;
+      gameOver = true;
+      hideTopBar();
+      showMessageBox(`
+        <font size = 6>
+        <b>Congratulations!!! Player ${players.indexOf(p)+1}</b>
+        </font>
+
+        <br>
+        <br>
+        You win the Balloon Game!
+        <br>
+        Thank you for playing!
+        
+        <br>
+        <br>
+        <font size = 4>
+        Time Elapsed: <b>${totalTime} seconds</b>
+        </font>
+
+        <br>
+        <br>
+        <font size = 5>
+        Press <b>"Enter"</b> to play again.
+        </font>
+
+        <br>
+        <br>
+        <font size =1>
+        Developed by <b>Htet Zaw Oo</b> for A3: Functional Prototype.
+        <br>
+        Contact: htetzawoo1995@gmail.com
+        </font>
+        `);
+        break;
+    }
+    p.timeoutID = setTimeout(() => {
+      p.prevCode = null;
+      p.currCode = null;
+      p.swipeProgress = 0;
+    }, swipeTime);
+  }  
 }
 
 
@@ -157,25 +263,23 @@ function startScreen() {
 
     <br>
     <br>
-    Please choose number of players.
+    <font size = 4>
+    Instructions
+    </font>
     <br>
-    Please press <b>2</b> or <b>3</b> on the keyboard.
-    <br>
-    <br>
-
     <font size = 2>
-    Instructions: Each player will be assigned with different keys to inflate and pop the balloon.
+    Each player will be assigned with different keys to inflate and pop the balloon.
     <br>
     Step 1: Tap the two assigned keys alternatively to inflate it.
     <br>
-    Step 2: Once it is fully inflated, swipe the assigned key row from any direction to pop it.
+    Step 2: Once it is fully inflated, swipe the assigned key row from left to right to pop it.
     </font>
 
     <br>
     <br>
+    <font size = 4>
     Assigned Keys
-
-    <br>
+    </font>
     <br>
     <font size = 2>
     Player 1 (Red) | Tap: <b>Z</b> & <b>X</b> | Swipe: <b>Z</b> <=> <b>V</b>
@@ -184,21 +288,33 @@ function startScreen() {
     <br>
     Player 3 (Blue) | Tap: <b>O</b> & <b>P</b> | Swipe: <b>O</b> <=> <b>]</b>
     </font>
-  `);
-  //Put your event listener code here
 
-document.addEventListener("keydown", (event) => {
-  if (event.code === "Enter"){
-    startGame();
-    console.log(players);
+    <br>
+    <br>
+    <font size = 5>
+    Press <b>"Enter"</b> to start the game.
+    </font>
+  `);
+
+
+//Event Listener to handle Inputs
+
+window.addEventListener("keydown", (event) => {
+  const key = event.key.toLowerCase();
+  const code = event.code;
+  console.log(`Input Key: ${code}`);
+
+  if (!gameStart && !gameOver){
+    if (key === "enter"){
+      startGame();
+      return;
+    }
   }
-});
-document.addEventListener("keydown", (event)=>{
-  if (event.code === "Space"){
+  if (gameOver && key === "enter"){
     restartGame();
-    console.log(players);
+    return;
   }
-});
-  window.requestAnimationFrame(loop);
+  handlingInput(key, code); 
+}); 
 }
-startScreen(); // Always remember to call setup()!
+startScreen(); // Always remember to call startScreen()!

@@ -35,10 +35,11 @@ body {
     color:white;
     font-size: larger;
     text-align: center;
-    background: darkgray;
+    background: black;
     border-radius: 15px;
     padding: 20px; /*Space between border and content*/
     cursor: default;
+    opacity: 0.5;
 }
 
 .topbar {
@@ -49,8 +50,9 @@ body {
     color:white;
     font-size: larger;
     text-align: center;
-    background: darkgray;
+    background: black;
     border-radius: 10px;
     padding: 10px;
     cursor: default;
+    opacity: 0.5;
 }
