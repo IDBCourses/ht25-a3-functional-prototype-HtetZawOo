@@ -276,11 +276,11 @@ function startScreen() {
     </font>
     <br>
     <font size = 2>
-    Player 1 (Red) | Tap: <b>Z</b> & <b>X</b> | Swipe: <b>Z</b> <=> <b>V</b>
+    Player 1 (Red) | Tap: <b>Z</b> & <b>X</b> | Swipe: <b>Z</b> => <b>V</b>
     <br>
-    Player 2 (Green) | Tap: <b>G</b> & <b>H</b> | Swipe: <b>G</b> <=> <b>K</b>
+    Player 2 (Green) | Tap: <b>G</b> & <b>H</b> | Swipe: <b>G</b> => <b>K</b>
     <br>
-    Player 3 (Blue) | Tap: <b>O</b> & <b>P</b> | Swipe: <b>O</b> <=> <b>]</b>
+    Player 3 (Blue) | Tap: <b>O</b> & <b>P</b> | Swipe: <b>O</b> => <b>]</b>
     </font>
 
     <br>
