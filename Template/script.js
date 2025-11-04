@@ -99,7 +99,7 @@ function startGame(){
   setTimeout(updateTopBar,gameStartBarTimer);
 }
 
-//Game Restart function
+/* //Game Restart function
 function restartGame(){
   hideMessageBox();
   clearTopBarData();
@@ -110,7 +110,7 @@ function restartGame(){
   gameOver = false;
   winner = null;
   startScreen();
-}
+} */
 
 //Create Players and Balloons
 function createPlayers(){
@@ -230,12 +230,6 @@ function handlingInput (key,code){
 
         <br>
         <br>
-        <font size = 5>
-        Press <b>"Enter"</b> to play again.
-        </font>
-
-        <br>
-        <br>
         <font size =1>
         Developed by <b>Htet Zaw Oo</b> for A3: Functional Prototype.
         <br>
@@ -310,10 +304,10 @@ window.addEventListener("keydown", (event) => {
       return;
     }
   }
-  if (gameOver && key === "enter"){
+  /* if (gameOver && key === "enter"){
     restartGame();
     return;
-  }
+  } */
   handlingInput(key, code); 
 }); 
 }
