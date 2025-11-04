@@ -25,7 +25,7 @@ let gameOver = false;
 const initialSize = 50;
 const targetSize = 250;
 const growthRate = 10;
-const swipeTime = 500;
+const swipeTime = 100;
 
 //Assigned Keys
 const assignedTapKeys = [
@@ -147,21 +147,21 @@ for (let i=0; i<nPlayers; i++){
 //Handling Input
 function handlingInputKey (key,code){
   for (let p of players) {
-    if (p.popped) continue;  
+    if (p.popped) continue;  //if popped, terminates current iteration inside loop and starts a new iteration
     //Tap alternatively to Grow
-    if (!p.finished) {
-      if (p.tapKeys.includes(key)){
-        if (p.lastKey === null){
+    if (!p.finished) { //if not finished inflating,
+      if (p.tapKeys.includes(key)){ // if tapped key includes input key
+        if (p.lastKey === null){ //if there is no last key
           p.lastKey = key;
-          p.startTime = performance.now();
-        } else if (p.lastKey !== key){
+          p.startTime = performance.now(); // save that time as start time
+        } else if (p.lastKey !== key){ // if last key is not tapped key
           p.lastKey = key;
-          p.presses++;
+          p.presses++; 
           p.size += growthRate;
           Util.setSize(p.size,p.size,p.item);
+          //When balloon reaches or exceeds target size,
             if (p.size >= targetSize){
-              p.finished = true;
-             /*  clearTimeout(p.timeoutID); */
+              p.finished = true; //finished inflation phase
               showMessageBox(`<b>Player ${players.indexOf(p)+1}</b>, swipe to pop the balloon!`);
             }
         }
@@ -172,8 +172,8 @@ function handlingInputKey (key,code){
 
   //Swipe Detect (Left to Right)
   for (let p of players){
-    if (!p.finished || p.popped) continue;
-    if (!p.swipeKeys.includes(code)) continue;
+    if (!p.finished || p.popped) continue; // if not finished inflating or if popped
+    if (!p.swipeKeys.includes(code)) continue; // if swipe keys include input key code
 
     clearTimeout(p.timeoutID);
     p.prevCode = p.currCode;
@@ -184,21 +184,21 @@ function handlingInputKey (key,code){
 
     //Progress only if swiping from Left to Right
     if (prevIndex >=0 && currIndex === prevIndex +1){
-      p.swipeProgress++;
-    } else if (prevIndex === -1 && currIndex === 0) {
+      p.swipeProgress++; // if input is adjacent right button of previous input
+    } else if (prevIndex === -1 && currIndex === 0) { // if there is no previous input and current input is the start of array index
       p.swipeProgress = 1; //First key of Swipe row
     } else {
       p.swipeProgress = currIndex === 0 ? 1 : 0;//Wrong direction or Key skipped resets progress : if (currIndex === 0){p.swipeProgress = 1} else {p.swipeProgress = 0}
     }
 
     //If full swipe is executed
-    if (p.swipeProgress >= p.swipeKeys.length){ //4
-      p.endTime = performance.now();
-      const totalTime = ((p.endTime - p.startTime)/1000).toFixed(2);//To show in seconds with 2 decimal places
+    if (p.swipeProgress >= p.swipeKeys.length){ //if player executes successfully of full swipe, 4 keys per player
+      p.endTime = performance.now(); //save that time as end time
+      const totalTime = ((p.endTime - p.startTime)/1000).toFixed(2);//To show total time elapsed in seconds with 2 decimal places
       Util.setSize(0,0,p.item);
-      p.popped = true;
-      winner = p;
-      gameOver = true;
+      p.popped = true; // considered as popped
+      winner = p; // that player becomes winner
+      gameOver = true; // game ends
       hideTopBar();
       showMessageBox(`
         <font size = 6>
@@ -225,13 +225,18 @@ function handlingInputKey (key,code){
         Contact: htetzawoo1995@gmail.com
         </font>
         `);
-        break;
+        break; // terminates current loop
     }
-    p.timeoutID = setTimeout(() => {
-      p.prevCode = null;
+    //Local Event listener for swipe gesture: resetting key presses and swipe progress after taking more than swipeTime after key up for that player
+    document.addEventListener("keyup", (event) => {
+      p.timeoutID = setTimeout(() => {
+      p.prevCode = null; // resets key presses
       p.currCode = null;
-      p.swipeProgress = 0;
+      p.swipeProgress = 0; // resets swipe progress
     }, swipeTime);
+    }
+    )
+    
   }  
 }
 // Starting Screen is run once, at the start of the program. It sets everything up for us!
@@ -290,7 +295,7 @@ function loop() {
 }
 
 // Put your event listener code here
-//Event Listener to handle Inputs
+//Global Event Listener to handle Inputs
 
 window.addEventListener("keydown", (event) => {
   const key = event.key.toLowerCase();
