@@ -154,8 +154,8 @@ function handlingInputKey (key,code){
         if (p.lastKey === null){ //if there is no last key
           p.lastKey = key;
           p.startTime = performance.now(); // save that time as start time
-        } else if (p.lastKey !== key){ // if last key is not tapped key
-          p.lastKey = key;
+        } else if (p.lastKey !== key){ // if last key is not input key (but has to be within assigned key)
+          p.lastKey = key; //new last key is updated as input key
           p.presses++; 
           p.size += growthRate;
           Util.setSize(p.size,p.size,p.item);
