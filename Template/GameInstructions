@@ -1,0 +1,24 @@
+Balloon Popping Multiplayer Game!
+
+Press "Enter" to start the game.
+To restart the game, please refresh the web.
+
+  In Game Instructions
+    
+    Each player will be assigned with different keys to inflate and pop the balloon.
+    Player who managed to pop the balloon first wins the game.
+
+    Step 1: Tap the two assigned keys alternatively to inflate it.
+    Step 2: Once it is fully inflated, swipe the assigned key row from left to right to pop it.
+
+  
+    Assigned Keys
+    
+    Player 1 (Red) | Tap: "Z" & "X" | Swipe: "Z" => "V"
+    <br>
+    Player 2 (Green) | Tap: "G" & "H" | Swipe: "G" => "K"
+    <br>
+    Player 3 (Blue) | Tap: "O" & "P" | Swipe: "O" => "]"
+    
+    
+  

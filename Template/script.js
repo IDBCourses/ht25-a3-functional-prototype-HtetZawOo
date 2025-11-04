@@ -5,7 +5,7 @@
 
 import * as Util from "./util.js";
 
-
+//State variables are the parts of your program that change over time.
 //Global Variables
 
 
@@ -18,6 +18,7 @@ let gameStart = false;
 let gameOver = false;
 
 
+//Settings variables should contain all of the "fixed" parts of your programs
 //Global fixed Variables
 
 
@@ -99,18 +100,6 @@ function startGame(){
   setTimeout(updateTopBar,gameStartBarTimer);
 }
 
-/* //Game Restart function
-function restartGame(){
-  hideMessageBox();
-  clearTopBarData();
-  players.forEach((p) => {
-      p.item.remove()
-  });
-  gameStart = false;
-  gameOver = false;
-  winner = null;
-  startScreen();
-} */
 
 //Create Players and Balloons
 function createPlayers(){
@@ -156,7 +145,7 @@ for (let i=0; i<nPlayers; i++){
 }
 
 //Handling Input
-function handlingInput (key,code){
+function handlingInputKey (key,code){
   for (let p of players) {
     if (p.popped) continue;  
     //Tap alternatively to Grow
@@ -245,14 +234,14 @@ function handlingInput (key,code){
     }, swipeTime);
   }  
 }
-
+// Starting Screen is run once, at the start of the program. It sets everything up for us!
 
 //Starting Screen of the Game
 function startScreen() {
   hideTopBar();
   showMessageBox(`
     <font size = 6>
-    <b>Balloon Popping Race!</b>
+    <b>Balloon Popping Multiplayer Game!</b>
     </font>
 
     <br>
@@ -263,6 +252,9 @@ function startScreen() {
     <br>
     <font size = 2>
     Each player will be assigned with different keys to inflate and pop the balloon.
+    <br>
+    Player who managed to pop the balloon first wins the game.
+    <br>
     <br>
     Step 1: Tap the two assigned keys alternatively to inflate it.
     <br>
@@ -290,7 +282,14 @@ function startScreen() {
     </font>
   `);
 
+// Code that runs over and over again
+function loop() {
+  
 
+  window.requestAnimationFrame(loop);
+}
+
+// Put your event listener code here
 //Event Listener to handle Inputs
 
 window.addEventListener("keydown", (event) => {
@@ -308,7 +307,8 @@ window.addEventListener("keydown", (event) => {
     restartGame();
     return;
   } */
-  handlingInput(key, code); 
+  handlingInputKey(key, code); //Handling the input keys throughout the game
 }); 
+window.requestAnimationFrame(loop);
 }
-startScreen(); // Always remember to call startScreen()!
+startScreen(); // Always remember to call startScreen()! (I changed the setup function name to startScreen to make it more realistic with my game)
