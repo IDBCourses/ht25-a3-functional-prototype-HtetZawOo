@@ -213,7 +213,7 @@ function handlingInput (key,code){
       hideTopBar();
       showMessageBox(`
         <font size = 6>
-        <b>Congratulations!!! Player ${players.indexOf(p)+1}</b>
+        <b>Congratulations!!! Player ${players.indexOf(p)+1}!</b>
         </font>
 
         <br>
